@@ -64,7 +64,6 @@ dependencies {
     implementation("androidx.constraintlayout:constraintlayout:2.1.4")
 
     // Annotation processor
-//    kapt("androidx.lifecycle:lifecycle-compiler:$lifecycle_version")              // below line is java8 based replacement for faster processing
     implementation("androidx.lifecycle:lifecycle-common-java8:$lifecycle_version")
 
     // LiveData
@@ -76,8 +75,7 @@ dependencies {
     implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycle_version")
 
     // Kotlin
-//    implementation "androidx.fragment:fragment-ktx:$fragment_version"   // Groovy-format
-    implementation("androidx.fragment:fragment-ktx:$fragment_version")    // Kotlin-format
+    implementation("androidx.fragment:fragment-ktx:$fragment_version")
 
     // Coroutines
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutine_version")
