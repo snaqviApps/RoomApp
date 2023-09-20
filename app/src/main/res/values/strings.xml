@@ -1,3 +1,9 @@
 <resources>
     <string name="app_name">RoomApp</string>
+    <string name="subscribers_email">Subscriber\'s email</string>
+    <string name="subscribers_name">Subscriber\'s name</string>
+    <string name="speakable_content_save_cta">Save CTA</string>
+    <string name="speakable_content_clear_cta">Clear CTA</string>
+    <string name="item_name_placeholder">name placeholder</string>
+    <string name="item_email_placeholder">email placeholder</string>
 </resources>
