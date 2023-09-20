@@ -11,7 +11,7 @@ import androidx.room.Update
 @Dao
 interface SubscriberDAO {
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)            // can have different strategies when an Id has refreshed data
+    @Insert(onConflict = OnConflictStrategy.IGNORE)            // can have different strategies when an Id has refreshed data
     suspend fun insertSubscriber(subscriber: Subscriber)
 
     @Update

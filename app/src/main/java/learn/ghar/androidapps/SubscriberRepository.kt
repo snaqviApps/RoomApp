@@ -3,7 +3,7 @@ package learn.ghar.androidapps
 import learn.ghar.androidapps.db.Subscriber
 import learn.ghar.androidapps.db.SubscriberDAO
 
-class SusbscriberRepo(private val dao: SubscriberDAO) {
+class SubscriberRepository(private val dao: SubscriberDAO) {
 
     val subscribers = dao.getAllSubscribers()           // due to liveData (or Flow), it is already run on background thread
 
