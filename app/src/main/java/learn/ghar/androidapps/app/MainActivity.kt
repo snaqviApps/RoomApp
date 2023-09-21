@@ -3,13 +3,10 @@ package learn.ghar.androidapps.app
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.widget.Toast
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
-import kotlinx.coroutines.flow.asFlow
-import kotlinx.coroutines.flow.map
-import learn.ghar.androidapps.R
 import learn.ghar.androidapps.SubscriberRepository
 import learn.ghar.androidapps.databinding.ActivityMainBinding
 import learn.ghar.androidapps.db.Subscriber
@@ -17,7 +14,6 @@ import learn.ghar.androidapps.db.SubscriberDatabase
 import learn.ghar.androidapps.view.SubscriberViewModel
 import learn.ghar.androidapps.view.SubscriberViewModelFactory
 import learn.ghar.androidapps.view.SubscribersAdapter
-import learn.ghar.androidapps.view.SubscribersViewHolder
 
 class MainActivity : AppCompatActivity() {
     private lateinit var mainBinding : ActivityMainBinding
@@ -34,9 +30,7 @@ class MainActivity : AppCompatActivity() {
         mainViewModel = ViewModelProvider(this, viewModelFactory)[SubscriberViewModel::class.java]
         mainBinding.mainViewModelXML = mainViewModel                                // assigning to binding-object
         mainBinding.lifecycleOwner = this                                           // assigning lifeCycle owner for liveData-interaction with data-binding
-
-        // fetch Subscriber's data from db, and display
-        initRV()
+        initRV()                                                                    // fetch Subscriber's data from db, and display
     }
 
     private fun initRV() {
@@ -54,7 +48,15 @@ class MainActivity : AppCompatActivity() {
             Log.i("TAG", subs.map {
                 it.name.plus(" : ${it.email}")
             }.toString())
-            mainBinding.subscriberRecyclerView.adapter = SubscribersAdapter(subs)
+            mainBinding.subscriberRecyclerView.adapter = SubscribersAdapter(subs,{ subscriberClicked: Subscriber ->
+                listItemClickListener(subscriberClicked)
+            })
         })
+    }
+
+    /** List-Item clickListener */
+    private fun listItemClickListener(subscriber: Subscriber){
+        Toast.makeText(this, "name :${subscriber.name}", Toast.LENGTH_SHORT).show()
+        mainViewModel.initUpdateAndDelete(subscriber)
     }
 }

@@ -43,7 +43,7 @@
             android:ems="10"
             android:text="@={mainViewModelXML._inputEmail}"
             android:hint="@string/subscribers_email"
-            android:inputType="textPhonetic"
+            android:inputType="textEmailAddress"
             android:autoSizeTextType="none"
             android:textSize="18sp"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -92,6 +92,8 @@
             android:id="@+id/subscriber_recyclerView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="1dp"
+            android:layout_marginTop="1dp"
             android:layout_margin="8dp" />
 
 </LinearLayout>

@@ -3,14 +3,15 @@ package learn.ghar.androidapps.view
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import learn.ghar.androidapps.R
 import learn.ghar.androidapps.databinding.SubscriberListItemBinding
 import learn.ghar.androidapps.db.Subscriber
 
-class SubscribersAdapter(private val subscribers: List<Subscriber>) : RecyclerView.Adapter<SubscribersViewHolder>() {
+class SubscribersAdapter(
+    private val subscribers: List<Subscriber>,
+    private val itemClickListener: (Subscriber) -> Unit
+) : RecyclerView.Adapter<SubscribersViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SubscribersViewHolder {
         val layoutInflater = LayoutInflater.from(parent.context)    // here we create list_item_view layout
-//        val rViewBinding = SubscriberListItemBinding.inflate(layoutInflater, R.layout.subscriber_list_item, false)
         val rViewBinding = SubscriberListItemBinding.inflate(layoutInflater)
         return SubscribersViewHolder(rViewBinding)
     }
@@ -20,16 +21,18 @@ class SubscribersAdapter(private val subscribers: List<Subscriber>) : RecyclerVi
     }
 
     override fun onBindViewHolder(holder: SubscribersViewHolder, position: Int) {
-//        holder.bind(subscribers.get(position))      ---> not very optimized
-        holder.bind(subscribers[position])            // indexing operator
+        holder.bind(subscribers[position], itemClickListener)
     }
 
 }
 
-class SubscribersViewHolder(val listItemBinding: SubscriberListItemBinding) : RecyclerView.ViewHolder(listItemBinding.root){
+class SubscribersViewHolder(private val listItemBinding: SubscriberListItemBinding) : RecyclerView.ViewHolder(listItemBinding.root){
 
-    fun bind(subscriber: Subscriber){
+    fun bind(subscriber: Subscriber, itemClickListener: (Subscriber) -> Unit){
         listItemBinding.tvItemName.text = subscriber.name
         listItemBinding.tvItemEmail.text = subscriber.email
+        listItemBinding.listItemLayout.setOnClickListener {
+            itemClickListener(subscriber)
+        }
     }
 }
