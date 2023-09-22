@@ -6,7 +6,6 @@
 <LinearLayout
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="8dp"
     android:orientation="vertical">
 
     <androidx.cardview.widget.CardView
@@ -15,7 +14,7 @@
         android:layout_height="match_parent"
         android:layout_gravity="center"
         android:focusable="true"
-        app:cardBackgroundColor="@color/material_dynamic_primary60">
+        app:cardBackgroundColor="@color/material_dynamic_secondary80">
 
         <LinearLayout
             android:id="@+id/list_item_layout"
@@ -43,9 +42,10 @@
             android:layout_marginBottom="8dp"
             android:textStyle="bold" />
         </LinearLayout>
-
-
     </androidx.cardview.widget.CardView>
-
+    <Space
+        android:layout_width="match_parent"
+        android:background="@color/material_on_surface_stroke"
+        android:layout_height="11dp" />
 </LinearLayout>
 </layout>
