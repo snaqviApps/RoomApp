@@ -79,22 +79,26 @@ class SubscriberViewModel(private val repo: SubscriberRepository) : ViewModel() 
         }
     }
     private fun delete(subscriber: Subscriber) = viewModelScope.launch(Dispatchers.IO) {
-            repo.delete(subscriber)
+            val noOfRowsDeleted = repo.delete(subscriber)
         withContext(Dispatchers.Main) {
-            _inputName.value = ""
-            _inputEmail.value = ""
-            isUpdateOrDelete = false
-            saveOrUpdateButtonText.value = "Save"
-            clearOrDeleteAllButtonText.value = "Clear All"
-            _statusMessage.value = Event("Subscriber deleted successfully")
+            if(noOfRowsDeleted > 0) {
+                _inputName.value = ""
+                _inputEmail.value = ""
+                isUpdateOrDelete = false
+                saveOrUpdateButtonText.value = "Save"
+                clearOrDeleteAllButtonText.value = "Clear All"
+                _statusMessage.value = Event("$noOfRowsDeleted rows Subscriber deleted successfully")
+            } else {
+                _statusMessage.value = Event("Error occurred while trying to delete dB-Rows")
+            }
 
         }
     }
 
     private fun clearAll() = viewModelScope.launch(Dispatchers.IO) {
-        repo.deleteAll()
+        val rows = repo.deleteAll()
         withContext(Dispatchers.Main){
-            _statusMessage.value = Event("Subscriber cleared successfully")
+            _statusMessage.value = Event("$rows Subscribers cleared successfully")
         }
     }
 
