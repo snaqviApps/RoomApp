@@ -6,7 +6,7 @@ import androidx.recyclerview.widget.RecyclerView
 import learn.ghar.androidapps.databinding.SubscriberListItemBinding
 import learn.ghar.androidapps.db.Subscriber
 
-class SubscribersAdapter(
+class SubscribersAdapter (
     private val subscribers: List<Subscriber>,
     private val itemClickListener: (Subscriber) -> Unit
 ) : RecyclerView.Adapter<SubscribersViewHolder>() {

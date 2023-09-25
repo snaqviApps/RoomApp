@@ -1,5 +1,6 @@
 package learn.ghar.androidapps.view
 
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -8,6 +9,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import learn.ghar.androidapps.SubscriberRepository
 import learn.ghar.androidapps.db.Subscriber
+import learn.ghar.androidapps.view.eventwrapper.Event
 
 
 class SubscriberViewModel(private val repo: SubscriberRepository) : ViewModel() {
@@ -21,6 +23,11 @@ class SubscriberViewModel(private val repo: SubscriberRepository) : ViewModel() 
     val _inputName = MutableLiveData<String>()
     val _inputEmail = MutableLiveData<String>()
 //    val inputEmail : LiveData<String> = _inputEmail     // not using, for two-way binding
+
+    // Event-wrapper approach
+    private val _statusMessage = MutableLiveData<Event<String>>()
+    val statusMessage : LiveData<Event<String>>           // backing-field for _statusMessage
+        get() = _statusMessage
 
     val saveOrUpdateButtonText = MutableLiveData<String>()
     val clearOrDeleteAllButtonText = MutableLiveData<String>()
@@ -37,8 +44,6 @@ class SubscriberViewModel(private val repo: SubscriberRepository) : ViewModel() 
                 subscriberToUpdateOrDelete.name = name
                 subscriberToUpdateOrDelete.email = email
                 update(subscriberToUpdateOrDelete)
-//            }
-
             } else {
                 insert(Subscriber(0, name, email))
                 _inputName.value = ""
@@ -56,31 +61,41 @@ class SubscriberViewModel(private val repo: SubscriberRepository) : ViewModel() 
 
     private fun insert(subscriber: Subscriber) = viewModelScope.launch(Dispatchers.IO) {
             repo.insert(subscriber)
+        withContext(Dispatchers.Main){
+            _statusMessage.value = Event("Subscriber inserted successfully")
+        }
+
     }
     private fun update(subscriber: Subscriber) = viewModelScope.launch(Dispatchers.IO) {
             repo.update(subscriber)
+        withContext(Dispatchers.Main) {       // switching back to Main-Thread for UI-Interaction
+            _inputName.value = ""
+            _inputEmail.value = ""
+            isUpdateOrDelete = false
+            saveOrUpdateButtonText.value = "Save"
+            clearOrDeleteAllButtonText.value = "Clear All"
+            _statusMessage.value = Event("Subscriber updated successfully")
+
+        }
+    }
+    private fun delete(subscriber: Subscriber) = viewModelScope.launch(Dispatchers.IO) {
+            repo.delete(subscriber)
         withContext(Dispatchers.Main) {
             _inputName.value = ""
             _inputEmail.value = ""
             isUpdateOrDelete = false
             saveOrUpdateButtonText.value = "Save"
             clearOrDeleteAllButtonText.value = "Clear All"
-        }
-    }
-    private fun delete(subscriber: Subscriber) = viewModelScope.launch(Dispatchers.IO) {
-            repo.delete(subscriber)
-        withContext(Dispatchers.Main, {
-            _inputName.value = ""
-            _inputEmail.value = ""
-            isUpdateOrDelete = false
-            saveOrUpdateButtonText.value = "Save"
-            clearOrDeleteAllButtonText.value = "Clear All"
-        })
+            _statusMessage.value = Event("Subscriber deleted successfully")
 
+        }
     }
 
     private fun clearAll() = viewModelScope.launch(Dispatchers.IO) {
         repo.deleteAll()
+        withContext(Dispatchers.Main){
+            _statusMessage.value = Event("Subscriber cleared successfully")
+        }
     }
 
     fun initUpdateAndDelete(subscriber: Subscriber){
