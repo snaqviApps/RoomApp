@@ -18,10 +18,10 @@ interface SubscriberDAO {
     suspend fun updateSubscribers(subscriber: Subscriber)
 
     @Delete
-    suspend fun deleteSubscribers(subscriber: Subscriber) : Int
+    suspend fun deleteSubscribers(subscriber: Subscriber)
 
     @Query("DELETE FROM subscriber_data_table")
-    suspend fun deleteAll() : Int
+    suspend fun deleteAll()
 
     /**
      * note, there is no suspend key word, as Room-library runs this function on background thread
