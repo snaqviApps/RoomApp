@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import learn.ghar.androidapps.repository.SubscriberRepository
 import learn.ghar.androidapps.domain.SubscriberUI
 import learn.ghar.androidapps.utils.safeLet
@@ -56,21 +57,24 @@ class SubscriberViewModel(private val repo: SubscriberRepository) : ViewModel() 
 
     private fun update(subscriber: SubscriberUI) = viewModelScope.launch(Dispatchers.IO) {
         repo.update(subscriber)
-        inputName.value = ""
-        inputEmail.value = ""
-        isUpdateOrDelete = false
-        saveOrUpdateButtonText.value = "Save"
-        clearOrDeleteAllButtonText.value = "Clear All"
+        withContext(Dispatchers.Main) {
+            inputName.value = ""
+            inputEmail.value = ""
+            isUpdateOrDelete = false
+            saveOrUpdateButtonText.value = "Save"
+            clearOrDeleteAllButtonText.value = "Clear All"
+        }
     }
 
     private fun delete(subscriber: SubscriberUI) = viewModelScope.launch(Dispatchers.IO) {
-        repo.delete(subscriber)
-        inputName.value = ""
-        inputEmail.value = ""
-        isUpdateOrDelete = false
-        saveOrUpdateButtonText.value = "Save"
-        clearOrDeleteAllButtonText.value = "Clear All"
-
+        withContext(Dispatchers.Main) {
+            repo.delete(subscriber)
+            inputName.value = ""
+            inputEmail.value = ""
+            isUpdateOrDelete = false
+            saveOrUpdateButtonText.value = "Save"
+            clearOrDeleteAllButtonText.value = "Clear All"
+        }
     }
 
     private fun clearAll() = viewModelScope.launch(Dispatchers.IO) {
